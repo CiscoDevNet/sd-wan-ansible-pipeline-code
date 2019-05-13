@@ -1,0 +1,41 @@
+- hosts: localhost
+  gather_facts: no
+  tasks:
+  - name: Remove host from known_hosts
+    known_hosts:
+      name: "{{ hostvars[item].ansible_host }}"
+      state: absent
+    when: hostvars[item].ansible_host is defined
+    loop: "{{ groups.all }}"
+
+  - name: Find previsouly created certs
+    find:
+      paths: "{{ viptela_cert_dir }}"
+      patterns: '*.pem,*.key,*.csr,*.crt'
+    register: find_results
+
+  - name: Delete previsouly created certs
+    file:
+      path: "{{ item['path'] }}"
+      state: absent
+    with_items: "{{ find_results['files'] }}"
+
+  - set_fact:
+      sim_id: "{{ lookup('file', virl_sim_file, errors='ignore') }}"
+
+  - name: Destroy the simulation
+    uri:
+      url: "http://{{ virl_host }}:19399/simengine/rest/stop/{{ sim_id }}"
+      user: "{{ virl_username }}"
+      password: "{{ virl_password }}"
+      method: GET
+      return_content: yes
+    no_log: false  # Don't show output as your password will be on the URI string
+    register: uri_results
+    failed_when: false
+    delegate_to: localhost
+
+  - name: Delete Simulation ID File
+    file:
+      path: "{{ virl_sim_file }}"
+      state: absent

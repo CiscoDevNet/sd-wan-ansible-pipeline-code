@@ -1,0 +1,15 @@
+{% if router is defined %}
+{%  if router.bgp is defined %}
+router bgp {{ router.bgp.id }}
+{%   if router.bgp.router_id %}
+ bgp router-id {{ router.bgp.router_id }}
+{%   endif %}
+{%   for neighbor in router.bgp.neighbors|default([]) %}
+ neighbor {{ neighbor.id }} remote-as {{ neighbor.remote_as }}
+{%   endfor %}
+ address-family ipv4
+{%   for network in router.bgp['address-family'].global.ipv4.networks|default([]) %}
+  network {{ network.network|ipaddr('network') }} mask {{ network.network|ipaddr('netmask') }}
+{%   endfor %}
+{%  endif %}{# router.bgp is defined #}
+{% endif %}{# router is defined #}

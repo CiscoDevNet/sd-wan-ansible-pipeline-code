@@ -1,0 +1,104 @@
+- name: Add host to topology
+  hosts: all
+  gather_facts: no
+  tags:
+    - group
+  vars:
+    virt_platform: none
+  tasks:
+    - block:
+      - name: Check for VIRL information
+        set_fact:
+          virt_platform: virl
+
+      - name: Generate Day0 config
+        set_fact:
+          day0_config: "{{ lookup('template', virl.config_template) }}"
+        when: virl.config_template is defined
+      when: virl is defined
+
+    - name: Add to VIRL topology
+      group_by:
+        key: "virt_{{ virt_platform }}"
+
+- hosts: localhost
+  connection: local
+  run_once: yes
+  gather_facts: no
+  vars:
+    topo_file: topo.virl
+    topo_name: "{{ topo_file.split('.')[0] }}"
+    topo_id: "{{ lookup('password', '/dev/null length=4 chars=ascii_letters') }}"
+  tasks:
+    - name: Check for existing simulation
+      stat:
+        path: "{{ virl_sim_file }}"
+      register: stat_result
+
+    - block:
+      - name: Generate the Topology
+        set_fact:
+          topo_data: "{{ lookup('template', 'virl/topology_v1.j2') }}"
+          session: "{{ virl_tag }}_{{ topo_name }}_{{ topo_id }}"
+
+      - name: Write debug topology file
+        copy:
+          content: "{{ topo_data }}"
+          dest: topo.virl
+
+      - name: Create simulation environment directory
+        file:
+          path: "{{ virl_sim_file | dirname }}"
+          state: directory
+
+      - name: Create simulation ID file
+        copy:
+          dest: "{{ virl_sim_file }}"
+          content: "{{ session }}"
+
+      - name: Launch the simulation {{ session }}
+        uri:
+          url: "http://{{ virl_host }}:19399/simengine/rest/launch?session={{ session }}"
+          user: "{{ virl_username }}"
+          password: "{{ virl_password }}"
+          method: POST
+          headers:
+            Content-Type: "text/xml;charset=UTF-8"
+          body: "{{ topo_data }}"
+        register: uri_results
+        until: uri_results['status']|default(0) < 300 or uri_results['status']|default(0) >= 400
+        retries: 60
+        delay: 10
+      when: not stat_result.stat.exists
+
+    - name: Get the existing session ID
+      set_fact:
+        session: "{{lookup('file', virl_sim_file) }}"
+      when: stat_result.stat.exists
+
+    - name: Check the status of simulation {{ session }}
+      uri:
+        url: "http://{{ virl_host }}:19399/simengine/rest/status/{{ session }}"
+        user: "{{ virl_username }}"
+        password: "{{ virl_password }}"
+        method: GET
+      register: uri_results
+
+    - assert:
+        that:
+          - uri_results.json.state == 'ACTIVE'
+        msg: "Session {{ session }} is not active.  Either it did not start properly or was not cleaned properly.  Please run the clean.yml playbook and try again."
+
+    - set_fact:
+        session: "{{ lookup('file', virl_sim_file, errors='ignore') }}"
+
+    - name: Waiting for all nodes to become reachable
+      uri:
+        url: "http://{{ virl_host }}:19399/simengine/rest/nodes/{{ session }}"
+        user: "{{ virl_username }}"
+        password: "{{ virl_password }}"
+        method: GET
+      register: uri_results
+      until: (uri_results.json[session] is defined) and (uri_results.json[session].values() | map(attribute='reachable') | list | unique | join('') | bool)
+      retries: 60
+      delay: 10

@@ -1,0 +1,28 @@
+viptela:
+  system_ip: 192.168.255.14
+  site_id: 2
+  org: "{{ organization_name }}"
+  vbond:
+    remote: 10.0.0.11
+  gps_location:
+    latitude: 35.856360
+    longitude: -78.879725
+
+vpn_instances:
+  - vpn_id: 0
+    interfaces:
+      - if_name: ge0/0
+        ip:
+          address: 172.20.0.10/30
+        tunnel_interface:
+        enabled: true
+    routes:
+      - prefix: 0.0.0.0/0
+        next_hop:
+          address: 172.20.0.9
+  - vpn_id: 1
+    interfaces:
+      - if_name: ge0/1
+        ip:
+          address: 192.168.1.1/24
+        enabled: true

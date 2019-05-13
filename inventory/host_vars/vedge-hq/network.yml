@@ -1,0 +1,43 @@
+viptela:
+  system_ip: 192.168.255.13
+  site_id: 1
+  org: "{{ organization_name }}"
+  vbond:
+    remote: 10.0.0.11
+  omp:
+    advertise:
+      - ospf-external
+  gps_location:
+    latitude: 37.411343
+    longitude: -121.938803
+
+
+vpn_instances:
+  - vpn_id: 0
+    interfaces:
+      - if_name: ge0/0
+        ip:
+          address: 10.0.0.13/24
+        tunnel_interface:
+        enabled: true
+    routes:
+      - prefix: 0.0.0.0/0
+        next_hop:
+          address: 10.0.0.1
+  - vpn_id: 1
+    interfaces:
+      - if_name: ge0/1
+        ip:
+          address: 10.0.255.6/30
+        enabled: true
+    ospf:
+      area: 0
+      redistribute:
+        - omp
+      interfaces:
+        - if_name: ge0/1
+          hello_interval: 10
+          dead_interval: 40
+          retransmit_interval: 5
+          priority: 1
+          network: broadcast
