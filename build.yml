@@ -21,7 +21,8 @@
       group_by:
         key: "virt_{{ virt_platform }}"
 
-- hosts: localhost
+- name: Generate topology and start simulation
+  hosts: localhost
   connection: local
   run_once: yes
   gather_facts: no
