@@ -4,6 +4,17 @@ viptela:
   org: "{{ organization_name }}"
   vbond:
     remote: 10.0.0.11
+  template:
+    name: 'branch-vedge'
+    variables:
+      'vpn0_internet_ipv4_address': 172.20.0.10/30
+      'vpn0_default_gateway': 172.20.0.9
+      'vpn1_ipv4_address': 192.168.1.1/24
+      'system_latitude': 35.856360
+      'system_longitude': -78.879725
+      'system_site_id': 2
+      'system_host_name': vedge1
+      'system_system_ip': 192.168.255.14
   gps_location:
     latitude: 35.856360
     longitude: -78.879725
@@ -20,9 +31,3 @@ vpn_instances:
       - prefix: 0.0.0.0/0
         next_hop:
           address: 172.20.0.9
-  - vpn_id: 1
-    interfaces:
-      - if_name: ge0/1
-        ip:
-          address: 192.168.1.1/24
-        enabled: true
