@@ -19,7 +19,7 @@
         msg: "'organization_name' must be defined and {{ serial_number_file }} must exist.  Verify the requirements in README are met."
 
 - name: Check initial connectivity
-  hosts: router:&virl_node
+  hosts: router:&virl_hosts
   tags:
     - check_control
     - check_all
@@ -104,7 +104,7 @@
         provider: selfsigned
 
 - name: Configuring Viptela components
-  hosts: viptela_control:&virl_node
+  hosts: viptela_control:&virl_hosts
   tags:
     - control
     - edge
@@ -117,7 +117,7 @@
         content: "{{ lookup('template', 'viptela/netconf.j2') }}"
 
 - name: Check connetivty to Viptela control plane
-  hosts: router:&virl_node
+  hosts: router:&virl_hosts
   tags:
     - control
     - edge
@@ -253,7 +253,7 @@
       loop: "{{ groups.viptela_control }}"
 
     - name: Install Serial File
-      viptela_fileupload:
+      vmanage_fileupload:
         host: "{{ vmanage_ip }}"
         user: "{{ ansible_user }}"
         password: "{{ ansible_password }}"
@@ -261,7 +261,7 @@
       delegate_to: localhost
 
 - name: Configuring Viptela components
-  hosts: viptela_vedge:&virl_node
+  hosts: viptela_vedge:&virl_hosts
   tags:
     - edge
   any_errors_fatal: true
@@ -273,7 +273,7 @@
         content: "{{ lookup('template', 'viptela/netconf.j2') }}"
 
 - name: Check connetivty to edges
-  hosts: router:&virl_node
+  hosts: router:&virl_hosts
   tags:
     - edge
     - check_all
@@ -287,7 +287,7 @@
       loop: "{{ groups.viptela_vedge }}"
 
 - name: Bootstrap vEdges
-  hosts: viptela_vedge:&virl_node
+  hosts: viptela_vedge:&virl_hosts
   tags:
     - edge
   any_errors_fatal: true
@@ -324,20 +324,20 @@
       register: uri_results
       delegate_to: localhost
 
-- name: Checking connectivity between end hosts
-  hosts: client:&virl_node
-  tags:
-    - check_edge
-    - check_all
-    - edge
-  any_errors_fatal: true
-  gather_facts: no
-  tasks:
-    - wait_for:
-        port: 22
-        host: "{{ item }}"
-      loop:
-        - 10.0.1.10
-#        - 10.100.1.10
-      tags:
-        - configured
+# - name: Checking connectivity between end hosts
+#   hosts: client:&virl_hosts
+#   tags:
+#     - check_edge
+#     - check_all
+#     - edge
+#   any_errors_fatal: true
+#   gather_facts: no
+#   tasks:
+#     - wait_for:
+#         port: 22
+#         host: "{{ item }}"
+#       loop:
+#         - 10.0.1.10
+# #        - 10.100.1.10
+#       tags:
+#         - configured

@@ -5,7 +5,6 @@ import sys
 import json
 import argparse
 import requests
-import pprint
 import re
 
 
@@ -40,6 +39,8 @@ def main():
         password = os.environ['VIRL_PASSWORD']
     else:
         for config_file in CONFIG_FILES:
+            if config_file[0] == '~':
+                config_file = os.path.expanduser(config_file)
             if os.path.exists(config_file):
                 break
         else:
@@ -62,18 +63,24 @@ def main():
         password = result['VIRL_PASSWORD']
 
     inventory = {
+        '_meta': {
+            'hostvars': hostvars
+        },
         'all': {
+            'hosts': all_hosts,
             'vars': {
                 'virl_host': host,
                 'virl_username': username,
                 'virl_password': password
-            },
+            }
         },
-        'virl_node': {
+        'virl_hosts': {
             'hosts': all_hosts,
-        },
-        '_meta': {
-            'hostvars': hostvars
+            'vars': {
+                'virl_host': host,
+                'virl_username': username,
+                'virl_password': password
+            }
         }
     }
 
