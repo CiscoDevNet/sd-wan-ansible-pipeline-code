@@ -4,7 +4,6 @@
 *.pem
 *.crt
 backup/
-licenses/
 .virl/
 .virlrc
 viptela_api_cookie
