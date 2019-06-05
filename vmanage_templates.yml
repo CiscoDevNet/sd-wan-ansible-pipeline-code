@@ -744,6 +744,10 @@ feature_templates:
   lastUpdatedBy: admin
   lastUpdatedOn: 1559268769391
   templateDefinition:
+    vpn-id:
+      vipObjectType: object
+      vipType: constant
+      vipValue: 0
     ecmp-hash-key:
       layer4:
         vipObjectType: object
@@ -821,10 +825,6 @@ feature_templates:
       vipType: ignore
       vipValue: 'false'
       vipVariableName: vpn_tcp_optimization
-    vpn-id:
-      vipObjectType: object
-      vipType: constant
-      vipValue: 0
   templateDescription: vedge_vpn0
   templateId: 44769f25-5ac8-490d-8059-bb19f19b70f0
   templateMinVersion: 15.0.0
@@ -843,6 +843,10 @@ feature_templates:
   lastUpdatedBy: admin
   lastUpdatedOn: 1559268769549
   templateDefinition:
+    vpn-id:
+      vipObjectType: object
+      vipType: constant
+      vipValue: 512
     ecmp-hash-key:
       layer4:
         vipObjectType: object
@@ -887,10 +891,6 @@ feature_templates:
       vipType: ignore
       vipValue: 'false'
       vipVariableName: vpn_tcp_optimization
-    vpn-id:
-      vipObjectType: object
-      vipType: constant
-      vipValue: 512
   templateDescription: vedge_vpn512
   templateId: 994ad87e-a9d5-41f0-9e7f-80e5f98dfc32
   templateMinVersion: 15.0.0
@@ -1495,6 +1495,10 @@ feature_templates:
   lastUpdatedBy: admin
   lastUpdatedOn: 1559268772084
   templateDefinition:
+    vpn-id:
+      vipObjectType: object
+      vipType: constant
+      vipValue: 1
     ecmp-hash-key:
       layer4:
         vipObjectType: object
@@ -1539,10 +1543,6 @@ feature_templates:
       vipType: ignore
       vipValue: 'false'
       vipVariableName: vpn_tcp_optimization
-    vpn-id:
-      vipObjectType: object
-      vipType: constant
-      vipValue: 1
   templateDescription: vpn1
   templateId: 50e4d0c1-ad6a-402e-9c92-6241bd5fa8e7
   templateMinVersion: 15.0.0
