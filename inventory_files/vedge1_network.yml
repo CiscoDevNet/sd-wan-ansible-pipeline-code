@@ -16,7 +16,7 @@ viptela:
       'system_host_name': vedge1
       'system_system_ip': 192.168.255.14
       'banner_login': "{{ login_banner }}"
-      'banner_motd': Welcome to vedge1!
+      'banner_motd': Cisco DevNet rules!
   gps_location:
     latitude: 35.856360
     longitude: -78.879725

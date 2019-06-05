@@ -18,6 +18,8 @@ viptela:
       'system_site_id': 1
       'system_host_name': vedge-hq
       'system_system_ip': 192.168.255.13
+      'banner_login': "{{ login_banner }}"
+      'banner_motd': Welcome to vedge-hq!
   gps_location:
     latitude: 37.411343
     longitude: -121.938803

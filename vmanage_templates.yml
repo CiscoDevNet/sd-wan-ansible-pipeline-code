@@ -1,74 +1,5 @@
 device_templates:
-- attached_devices:
-  - vedge2
-  - vedge1
-  configType: template
-  connectionPreference: true
-  connectionPreferenceRequired: true
-  deviceType: vedge-cloud
-  factoryDefault: false
-  featureTemplateUidRange: []
-  generalTemplates:
-  - templateName: Factory_Default_AAA_Template
-    templateType: aaa
-  - templateName: Factory_Default_BFD_Template
-    templateType: bfd-vedge
-  - templateName: Factory_Default_vEdge_OMP_Template
-    templateType: omp-vedge
-  - templateName: Factory_Default_vEdge_Security_Template
-    templateType: security-vedge
-  - subTemplates:
-    - templateName: Factory_Default_Logging_Template
-      templateType: logging
-    templateName: vedge_system
-    templateType: system-vedge
-  - subTemplates:
-    - templateName: vedge_vpn0_internet_interface
-      templateType: vpn-vedge-interface
-    templateName: vedge_vpn0
-    templateType: vpn-vedge
-  - subTemplates:
-    - templateName: vedge_vpn512_mgmt_interface
-      templateType: vpn-vedge-interface
-    templateName: vedge_vpn512
-    templateType: vpn-vedge
-  - subTemplates:
-    - templateName: vpn1_lan_interface
-      templateType: vpn-vedge-interface
-    templateName: vpn1
-    templateType: vpn-vedge
-  input:
-    columns:
-    - property: /1/ge0/1/interface/ip/address
-      title: IPv4 Address(vpn1_ipv4_address)
-      variable: vpn1_ipv4_address
-    - property: /0/vpn-instance/ip/route/0.0.0.0/0/next-hop/vpn0_default_gateway/address
-      title: Address(vpn0_default_gateway)
-      variable: vpn0_default_gateway
-    - property: /0/ge0/0/interface/ip/address
-      title: IPv4 Address(vpn0_internet_ipv4_address)
-      variable: vpn0_internet_ipv4_address
-    - property: //system/host-name
-      title: Hostname(system_host_name)
-      variable: system_host_name
-    - property: //system/gps-location/latitude
-      title: Latitude(system_latitude)
-      variable: system_latitude
-    - property: //system/gps-location/longitude
-      title: Longitude(system_longitude)
-      variable: system_longitude
-    - property: //system/system-ip
-      title: System IP(system_system_ip)
-      variable: system_system_ip
-    - property: //system/site-id
-      title: Site ID(system_site_id)
-      variable: system_site_id
-  policyId: ''
-  templateDescription: Branch vEdge Template
-  templateId: 4e73d1f9-d768-4596-9e1a-a4f695a24eee
-  templateName: branch-vedge
-- attached_devices:
-  - vedge-hq
+- attached_devices: []
   configType: template
   connectionPreference: true
   connectionPreferenceRequired: true
@@ -106,8 +37,16 @@ device_templates:
       templateType: vpn-vedge-interface
     templateName: vpn1
     templateType: vpn-vedge
+  - templateName: vedge_banner
+    templateType: banner
   input:
     columns:
+    - property: //banner/login
+      title: Login Banner(banner_login)
+      variable: banner_login
+    - property: //banner/motd
+      title: MOTD Banner(banner_motd)
+      variable: banner_motd
     - property: /1/ge0/1/interface/ip/address
       title: IPv4 Address(vpn1_ipv4_address)
       variable: vpn1_ipv4_address
@@ -134,21 +73,95 @@ device_templates:
       variable: system_site_id
   policyId: ''
   templateDescription: COLO vEdge Template
-  templateId: 7ec06fc9-a037-4180-a804-899a0d708c8e
+  templateId: fa35a814-8981-41aa-859b-ec14ed4fc041
   templateName: colo-vedge
+- attached_devices: []
+  configType: template
+  connectionPreference: true
+  connectionPreferenceRequired: true
+  deviceType: vedge-cloud
+  factoryDefault: false
+  featureTemplateUidRange: []
+  generalTemplates:
+  - templateName: Factory_Default_AAA_Template
+    templateType: aaa
+  - templateName: Factory_Default_BFD_Template
+    templateType: bfd-vedge
+  - templateName: Factory_Default_vEdge_OMP_Template
+    templateType: omp-vedge
+  - templateName: Factory_Default_vEdge_Security_Template
+    templateType: security-vedge
+  - subTemplates:
+    - templateName: Factory_Default_Logging_Template
+      templateType: logging
+    templateName: vedge_system
+    templateType: system-vedge
+  - subTemplates:
+    - templateName: vedge_vpn0_internet_interface
+      templateType: vpn-vedge-interface
+    templateName: vedge_vpn0
+    templateType: vpn-vedge
+  - subTemplates:
+    - templateName: vedge_vpn512_mgmt_interface
+      templateType: vpn-vedge-interface
+    templateName: vedge_vpn512
+    templateType: vpn-vedge
+  - subTemplates:
+    - templateName: vpn1_lan_interface
+      templateType: vpn-vedge-interface
+    templateName: vpn1
+    templateType: vpn-vedge
+  - templateName: vedge_banner
+    templateType: banner
+  input:
+    columns:
+    - property: //banner/login
+      title: Login Banner(banner_login)
+      variable: banner_login
+    - property: //banner/motd
+      title: MOTD Banner(banner_motd)
+      variable: banner_motd
+    - property: /1/ge0/1/interface/ip/address
+      title: IPv4 Address(vpn1_ipv4_address)
+      variable: vpn1_ipv4_address
+    - property: /0/vpn-instance/ip/route/0.0.0.0/0/next-hop/vpn0_default_gateway/address
+      title: Address(vpn0_default_gateway)
+      variable: vpn0_default_gateway
+    - property: /0/ge0/0/interface/ip/address
+      title: IPv4 Address(vpn0_internet_ipv4_address)
+      variable: vpn0_internet_ipv4_address
+    - property: //system/host-name
+      title: Hostname(system_host_name)
+      variable: system_host_name
+    - property: //system/gps-location/latitude
+      title: Latitude(system_latitude)
+      variable: system_latitude
+    - property: //system/gps-location/longitude
+      title: Longitude(system_longitude)
+      variable: system_longitude
+    - property: //system/system-ip
+      title: System IP(system_system_ip)
+      variable: system_system_ip
+    - property: //system/site-id
+      title: Site ID(system_site_id)
+      variable: system_site_id
+  policyId: ''
+  templateDescription: Branch vEdge Template
+  templateId: c97ecfda-8eea-42cd-aed7-d8c8c63f779c
+  templateName: branch-vedge
 feature_templates:
-- '@rid': 7
+- '@rid': 81
   attachedMastersCount: 2
   configType: xml
   createdBy: admin
-  createdOn: 1559272248307
+  createdOn: 1559758476726
   deviceType:
   - vedge-cloud
-  devicesAttached: 3
+  devicesAttached: 0
   factoryDefault: false
   feature: vmanage-default
   lastUpdatedBy: admin
-  lastUpdatedOn: 1559272248307
+  lastUpdatedOn: 1559758476726
   templateDefinition:
     admin-tech-on-failure:
       vipObjectType: object
@@ -303,22 +316,22 @@ feature_templates:
       vipValue: 'false'
       vipVariableName: system_usb_controller
   templateDescription: vedge_system
-  templateId: fe0989e5-618d-4313-9a51-3577deef7c73
+  templateId: 1b4d55ce-58b8-482a-8d1e-35755ea421ff
   templateMinVersion: 15.0.0
   templateName: vedge_system
   templateType: system-vedge
-- '@rid': 327
+- '@rid': 82
   attachedMastersCount: 2
   configType: xml
   createdBy: admin
-  createdOn: 1559271789252
+  createdOn: 1559758476897
   deviceType:
   - vedge-cloud
-  devicesAttached: 3
+  devicesAttached: 0
   factoryDefault: false
   feature: vmanage-default
   lastUpdatedBy: admin
-  lastUpdatedOn: 1559271789252
+  lastUpdatedOn: 1559758476897
   templateDefinition:
     access-list:
       vipObjectType: tree
@@ -514,22 +527,22 @@ feature_templates:
       vipType: ignore
       vipValue: []
   templateDescription: vedge_vpn512_mgmt_interface
-  templateId: 06e11086-2ba2-4caf-9dc2-10c4f495fcdb
+  templateId: 36714c74-45a8-492f-82cb-5af5bb494cb4
   templateMinVersion: 15.0.0
   templateName: vedge_vpn512_mgmt_interface
   templateType: vpn-vedge-interface
-- '@rid': 347
+- '@rid': 83
   attachedMastersCount: 1
   configType: xml
   createdBy: admin
-  createdOn: 1559268770745
+  createdOn: 1559758477068
   deviceType:
   - vedge-cloud
-  devicesAttached: 1
+  devicesAttached: 0
   factoryDefault: false
   feature: vmanage-default
   lastUpdatedBy: admin
-  lastUpdatedOn: 1559268932132
+  lastUpdatedOn: 1559758477068
   templateDefinition:
     ospf:
       area:
@@ -727,27 +740,23 @@ feature_templates:
             vipValue: 10000
             vipVariableName: ospf_max_hold
   templateDescription: vpn1_ospf
-  templateId: e119e9db-6c78-457a-86bf-1fe7ce9d255b
+  templateId: af829adb-9dbf-4529-a6f7-34405992a439
   templateMinVersion: 15.0.0
   templateName: vpn1_ospf
   templateType: ospf
-- '@rid': 385
+- '@rid': 84
   attachedMastersCount: 2
   configType: xml
   createdBy: admin
-  createdOn: 1559268769391
+  createdOn: 1559758477235
   deviceType:
   - vedge-cloud
-  devicesAttached: 3
+  devicesAttached: 0
   factoryDefault: false
   feature: vmanage-default
   lastUpdatedBy: admin
-  lastUpdatedOn: 1559268769391
+  lastUpdatedOn: 1559758477235
   templateDefinition:
-    vpn-id:
-      vipObjectType: object
-      vipType: constant
-      vipValue: 0
     ecmp-hash-key:
       layer4:
         vipObjectType: object
@@ -825,28 +834,28 @@ feature_templates:
       vipType: ignore
       vipValue: 'false'
       vipVariableName: vpn_tcp_optimization
-  templateDescription: vedge_vpn0
-  templateId: 44769f25-5ac8-490d-8059-bb19f19b70f0
-  templateMinVersion: 15.0.0
-  templateName: vedge_vpn0
-  templateType: vpn-vedge
-- '@rid': 386
-  attachedMastersCount: 2
-  configType: xml
-  createdBy: admin
-  createdOn: 1559268769549
-  deviceType:
-  - vedge-cloud
-  devicesAttached: 3
-  factoryDefault: false
-  feature: vmanage-default
-  lastUpdatedBy: admin
-  lastUpdatedOn: 1559268769549
-  templateDefinition:
     vpn-id:
       vipObjectType: object
       vipType: constant
-      vipValue: 512
+      vipValue: 0
+  templateDescription: vedge_vpn0
+  templateId: 744c5ec6-1082-477e-be21-58b59030b175
+  templateMinVersion: 15.0.0
+  templateName: vedge_vpn0
+  templateType: vpn-vedge
+- '@rid': 85
+  attachedMastersCount: 2
+  configType: xml
+  createdBy: admin
+  createdOn: 1559758477389
+  deviceType:
+  - vedge-cloud
+  devicesAttached: 0
+  factoryDefault: false
+  feature: vmanage-default
+  lastUpdatedBy: admin
+  lastUpdatedOn: 1559758477389
+  templateDefinition:
     ecmp-hash-key:
       layer4:
         vipObjectType: object
@@ -891,23 +900,27 @@ feature_templates:
       vipType: ignore
       vipValue: 'false'
       vipVariableName: vpn_tcp_optimization
+    vpn-id:
+      vipObjectType: object
+      vipType: constant
+      vipValue: 512
   templateDescription: vedge_vpn512
-  templateId: 994ad87e-a9d5-41f0-9e7f-80e5f98dfc32
+  templateId: b514b0fb-93b1-4c6e-9fc3-66155b05249c
   templateMinVersion: 15.0.0
   templateName: vedge_vpn512
   templateType: vpn-vedge
-- '@rid': 469
+- '@rid': 86
   attachedMastersCount: 2
   configType: xml
   createdBy: admin
-  createdOn: 1559268771569
+  createdOn: 1559758477538
   deviceType:
   - vedge-cloud
-  devicesAttached: 3
+  devicesAttached: 0
   factoryDefault: false
   feature: vmanage-default
   lastUpdatedBy: admin
-  lastUpdatedOn: 1559268771569
+  lastUpdatedOn: 1559758477538
   templateDefinition:
     access-list:
       vipObjectType: tree
@@ -1271,22 +1284,22 @@ feature_templates:
       vipType: ignore
       vipValue: []
   templateDescription: vpn0_internet_interface
-  templateId: 5c5c0fde-2f48-45a7-8dea-46736c815a2e
+  templateId: e4b0eb7c-f93e-4f5e-9aac-99cd501ced53
   templateMinVersion: 15.0.0
   templateName: vedge_vpn0_internet_interface
   templateType: vpn-vedge-interface
-- '@rid': 471
+- '@rid': 87
   attachedMastersCount: 2
   configType: xml
   createdBy: admin
-  createdOn: 1559268771907
+  createdOn: 1559758477694
   deviceType:
   - vedge-cloud
-  devicesAttached: 3
+  devicesAttached: 0
   factoryDefault: false
   feature: vmanage-default
   lastUpdatedBy: admin
-  lastUpdatedOn: 1559268771907
+  lastUpdatedOn: 1559758477694
   templateDefinition:
     access-list:
       vipObjectType: tree
@@ -1478,27 +1491,23 @@ feature_templates:
       vipType: ignore
       vipValue: []
   templateDescription: vpn1_lan_interface
-  templateId: 31cb7255-5314-4482-ba1c-bdee933268dd
+  templateId: 36761e42-29fd-4b4b-9184-6a784307d02f
   templateMinVersion: 15.0.0
   templateName: vpn1_lan_interface
   templateType: vpn-vedge-interface
-- '@rid': 472
+- '@rid': 88
   attachedMastersCount: 2
   configType: xml
   createdBy: admin
-  createdOn: 1559268772084
+  createdOn: 1559758477856
   deviceType:
   - vedge-cloud
-  devicesAttached: 3
+  devicesAttached: 0
   factoryDefault: false
   feature: vmanage-default
   lastUpdatedBy: admin
-  lastUpdatedOn: 1559268772084
+  lastUpdatedOn: 1559758477856
   templateDefinition:
-    vpn-id:
-      vipObjectType: object
-      vipType: constant
-      vipValue: 1
     ecmp-hash-key:
       layer4:
         vipObjectType: object
@@ -1543,8 +1552,40 @@ feature_templates:
       vipType: ignore
       vipValue: 'false'
       vipVariableName: vpn_tcp_optimization
+    vpn-id:
+      vipObjectType: object
+      vipType: constant
+      vipValue: 1
   templateDescription: vpn1
-  templateId: 50e4d0c1-ad6a-402e-9c92-6241bd5fa8e7
+  templateId: 47af2019-f895-4a86-8add-84cdff9e6450
   templateMinVersion: 15.0.0
   templateName: vpn1
   templateType: vpn-vedge
+- '@rid': 298
+  attachedMastersCount: 2
+  configType: xml
+  createdBy: admin
+  createdOn: 1559757430975
+  deviceType:
+  - vedge-cloud
+  devicesAttached: 0
+  factoryDefault: false
+  feature: vmanage-default
+  lastUpdatedBy: admin
+  lastUpdatedOn: 1559758634490
+  templateDefinition:
+    login:
+      vipObjectType: object
+      vipType: variableName
+      vipValue: ''
+      vipVariableName: banner_login
+    motd:
+      vipObjectType: object
+      vipType: variableName
+      vipValue: ''
+      vipVariableName: banner_motd
+  templateDescription: vedge_banner
+  templateId: 6d8a67d4-ebef-47a5-8ec8-bf218d930728
+  templateMinVersion: 15.0.0
+  templateName: vedge_banner
+  templateType: banner
