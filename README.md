@@ -24,7 +24,7 @@ The Ansible inventory data included in this repo is designed to build and config
 ![Topology](viptela1.png)
 
 ## Playbooks
-There six playbooks in this collection:
+There are seven playbooks in this collection:
 - **build.yml** builds the dynamic VIRL topology file and starts the simulation
 - **configure.yml** pushes the Day 1 configuration to devices via NETCONF
 - **import-templates.yml** imports device/feature templates into vManage
