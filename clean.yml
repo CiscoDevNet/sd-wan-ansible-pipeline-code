@@ -1,27 +1,43 @@
-- hosts: localhost
+- name: Configure licensing
+  hosts: firewall:&virl_hosts
   gather_facts: no
+  connection: network_cli
   tasks:
+    - name: Deregister from smart account
+      asa_command:
+        commands:
+          - "license smart deregister"
+      ignore_errors: yes
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    session: "{{ lookup('env', 'VIRL_SESSION') | default('') }}"
+  tasks:
+#  - name: Find previsouly created certs
+#    find:
+#      paths: "{{ viptela_cert_dir }}"
+#      patterns: '*.pem,*.key,*.csr,*.crt'
+#    register: find_results
+#
+#  - name: Delete previsouly created certs
+#    file:
+#      path: "{{ item['path'] }}"
+#      state: absent
+#    with_items: "{{ find_results['files'] }}"
+
+  - name: Delete cert dir
+    file:
+      path: "{{ viptela_cert_dir }}"
+      state: absent
+
   - name: Remove host from known_hosts
     known_hosts:
       name: "{{ hostvars[item].ansible_host }}"
       state: absent
     when: hostvars[item].ansible_host is defined
     loop: "{{ groups.all }}"
-
-  - name: Find previsouly created certs
-    find:
-      paths: "{{ viptela_cert_dir }}"
-      patterns: '*.pem,*.key,*.csr,*.crt'
-    register: find_results
-
-  - name: Delete previsouly created certs
-    file:
-      path: "{{ item['path'] }}"
-      state: absent
-    with_items: "{{ find_results['files'] }}"
-
-  - set_fact:
-      sim_id: "{{ lookup('file', virl_sim_file, errors='ignore') }}"
 
   - name: Destroy the simulation
     uri:
@@ -34,6 +50,8 @@
     register: uri_results
     failed_when: false
     delegate_to: localhost
+    vars:
+      sim_id: "{{ session | default(lookup('file', virl_sim_file, errors='ignore')) }}"
 
   - name: Delete Simulation ID File
     file:
