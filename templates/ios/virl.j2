@@ -21,8 +21,6 @@ vrf definition Mgmt-intf
 {# Static Routes #}
 {# ------------- #}
 {{ lookup('template', 'ios/cli/static-routes.j2') }}
-
-ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 ${NICID_0_GATEWAY}
 !
 {# ----------------- #}
 {# Routing Protocols #}
