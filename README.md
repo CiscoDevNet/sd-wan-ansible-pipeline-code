@@ -10,7 +10,7 @@ Clone the repo.  Note the use of the recursive switch.  This is to make sure the
 ```
 git clone --recursive https://github.com/CiscoDevNet/sd-wan-ansible-pipeline-code.git
 ```
-Change into the sd-wan-ansible-pipeline-code directory.
+Change into the ```sd-wan-ansible-pipeline-code``` directory.
 ```
 cd sd-wan-ansible-pipeline-code
 ```
@@ -18,6 +18,13 @@ Install the required Python modules.
 ```
 pip install -r requirements.txt
 ```
+If you are using your own VIRL server, create a ```.virlrc``` in the root of the ```sd-wan-ansible-pipeline-code``` directory with values for the following variables:
+```
+VIRL_USERNAME=guest
+VIRL_PASSWORD=guest
+VIRL_HOST=your.virl.server
+```
+
 ## Topology
 The Ansible inventory data included in this repo is designed to build and configure the following topology:
 
@@ -42,7 +49,7 @@ Bring up the control plane and basic device connectivity.
 ```
 ansible-playbook configure.yml
 ```
-Import device/feature templates into vManage
+Import device/feature templates into vManage.
 ```
 ansible-playbook import-templates.yml
 ```
