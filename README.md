@@ -10,7 +10,7 @@ Clone the repo.  Note the use of the recursive switch.  This is to make sure the
 ```
 git clone --recursive https://github.com/CiscoDevNet/sd-wan-ansible-pipeline-code.git
 ```
-Change into the ```sd-wan-ansible-pipeline-code``` directory.
+Change into the `sd-wan-ansible-pipeline-code` directory.
 ```
 cd sd-wan-ansible-pipeline-code
 ```
@@ -18,7 +18,7 @@ Install the required Python modules.
 ```
 pip install -r requirements.txt
 ```
-If you are using your own VIRL server, create a ```.virlrc``` in the root of the ```sd-wan-ansible-pipeline-code``` directory with values for the following variables:
+If you are using your own VIRL server, create a `.virlrc` in the root of the `sd-wan-ansible-pipeline-code` directory with values for the following variables:
 ```
 VIRL_USERNAME=guest
 VIRL_PASSWORD=guest
@@ -100,3 +100,4 @@ ansible-playbook attach-template.yml --limit=vedge1
 1. Use `virl nodes` to find node management IP addresses.
 1. When running the attach-template.yml playbook, you can limit the playbook to a specific node (e.g `--limit=vedge1`).
 1. When running the configure.yml playbook, you can limit the playbook to just control plane or just edge with `--limit=control` and `--limit=edge`.
+1. The vManage UI can be accessed by browsing to the IP address of vmanage1.
