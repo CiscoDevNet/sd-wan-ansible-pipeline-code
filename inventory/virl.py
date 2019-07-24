@@ -84,7 +84,9 @@ def main():
         }
     }
 
-    if os.path.exists('.virl/default/id'):
+    if 'VIRL_SESSION' in os.environ:
+        simulation = os.environ['VIRL_SESSION']
+    elif os.path.exists('.virl/default/id'):
         with open('.virl/default/id') as file:
             simulation = file.read()
 
