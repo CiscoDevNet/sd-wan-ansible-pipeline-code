@@ -19,6 +19,7 @@ all:
       hosts:
         server1:
         service1:
+    ha:
     viptela:
       children:
         viptela_control:
