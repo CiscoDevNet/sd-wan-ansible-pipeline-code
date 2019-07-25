@@ -5,7 +5,7 @@ stages:
   - apply_templates
   - test
   
-image: python:2
+image: ansible-viptela
 
 variables:
   ANSIBLE_GATHERING: "smart"
@@ -20,9 +20,6 @@ variables:
 clean:
   stage: clean
   script:
-  - apt-get update -qy
-  - apt-get install -y sshpass
-  - pip install -r requirements.txt
   - ansible-playbook clean.yml
   only:
     changes:
@@ -31,32 +28,21 @@ clean:
 build:
   stage: build
   script:
-  - apt-get update -qy
-  - apt-get install -y sshpass
-  - pip install -r requirements.txt
   - ansible-playbook build.yml
 
 configure:
   stage: configure
   script:
-  - apt-get update -qy
-  - apt-get install -y sshpass
-  - pip install -r requirements.txt
   - ansible-playbook configure.yml
   - ansible-playbook import-templates.yml
 
 apply_templates:
   stage: apply_templates
   script:
-  - apt-get update -qy
-  - apt-get install -y sshpass
-  - pip install -r requirements.txt
+  - ansible-playbook waitfor-sync.yml
   - ansible-playbook attach-template.yml
  
 test:
   stage: test
   script:
-  - apt-get update -qy
-  - apt-get install -y sshpass
-  - pip install -r requirements.txt
   - ansible-playbook check-sdwan.yml
