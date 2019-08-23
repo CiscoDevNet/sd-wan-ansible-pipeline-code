@@ -14,6 +14,7 @@ pipeline {
         VIRL_PASSWORD = credentials('cpn-virl-password')
         VIRL_HOST = credentials('cpn-virl-host')
         VIRL_SESSION = "jenkins_workshop1"
+        VIPTELA_ORG = "DevNet Learning Lab"
         HOME = "${WORKSPACE}"
         DEFAULT_LOCAL_TMP = "${WORKSPACE}/ansible"
     }
