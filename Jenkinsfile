@@ -28,9 +28,7 @@ pipeline {
         stage('Configure SD-WAN Fabric') {
            steps {
                 echo 'Configure SD-WAN Fabric'
-                withCredentials([file(credentialsId: 'viptela-serial-file', variable: 'VIPTELA_SERIAL_FILE')]) {
-                    ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', extras: '-e virl_tag=jenkins -e \'organization_name="${VIPTELA_ORG}"\' -e serial_number_file=${VIPTELA_SERIAL_FILE} -e viptela_cert_dir=${WORKSPACE}/myCA', playbook: 'configure.yml'
-                }
+                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', extras: '-e virl_tag=jenkins -e \'organization_name="${VIPTELA_ORG}"\' -e serial_number_file=${VIPTELA_SERIAL_FILE} -e viptela_cert_dir=${WORKSPACE}/myCA', playbook: 'configure.yml'
                 echo 'Loading Templates...'
                 ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'import-templates.yml'
                 echo 'Waiting for vEdges to Sync...'
