@@ -13,9 +13,7 @@ pipeline {
         VIRL_USERNAME = credentials('cpn-virl-username')
         VIRL_PASSWORD = credentials('cpn-virl-password')
         VIRL_HOST = credentials('cpn-virl-host')
-        VIRL_SESSION = "jenkins_sdwan"
-        VIPTELA_ORG = credentials('viptela-org')
-        LICENSE_TOKEN = credentials('license-token')
+        VIRL_SESSION = "jenkins_workshop1"
         HOME = "${WORKSPACE}"
         DEFAULT_LOCAL_TMP = "${WORKSPACE}/ansible"
     }
@@ -23,33 +21,33 @@ pipeline {
         stage('Build VIRL Topology') {
            steps {
                 echo 'Running build.yml...'
-                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/workshop1', playbook: 'build.yml'
+                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'build.yml'
            }
         }
         stage('Configure SD-WAN Fabric') {
            steps {
                 echo 'Configure SD-WAN Fabric'
                 withCredentials([file(credentialsId: 'viptela-serial-file', variable: 'VIPTELA_SERIAL_FILE')]) {
-                    ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/workshop1', extras: '-e virl_tag=jenkins -e \'organization_name="${VIPTELA_ORG}"\' -e serial_number_file=${VIPTELA_SERIAL_FILE} -e viptela_cert_dir=${WORKSPACE}/myCA', playbook: 'configure.yml'
+                    ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', extras: '-e virl_tag=jenkins -e \'organization_name="${VIPTELA_ORG}"\' -e serial_number_file=${VIPTELA_SERIAL_FILE} -e viptela_cert_dir=${WORKSPACE}/myCA', playbook: 'configure.yml'
                 }
                 echo 'Loading Templates...'
-                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/workshop1', playbook: 'import-templates.yml'
+                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'import-templates.yml'
                 echo 'Waiting for vEdges to Sync...'
-                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/workshop1', playbook: 'waitfor-sync.yml'
+                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'waitfor-sync.yml'
                 echo 'Attaching Templates...'
-                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/workshop1', playbook: 'attach-template.yml'
+                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'attach-template.yml'
            }
         }
         stage('Running Tests') {
            steps {
                 echo 'Check SD-WAN...'
-                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/workshop1', playbook: 'check-sdwan.yml'
+                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'check-sdwan.yml'
            }
         }      
     }    
     post {
         always {
-            ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/workshop1', playbook: 'clean.yml'
+            ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'clean.yml'
             cleanWs()
         }
     }
