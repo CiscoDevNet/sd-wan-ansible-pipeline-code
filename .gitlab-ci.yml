@@ -1,10 +1,11 @@
 stages:
+  - build_container
   - clean
-  - build
+  - build_topology
   - configure
   - apply_templates
   - test
-  
+
 image: ansible-viptela
 
 variables:
@@ -17,6 +18,12 @@ variables:
   ANSIBLE_CONFIG: "./ansible.cfg"
   GIT_SUBMODULE_STRATEGY: "recursive"
 
+build_container:
+  stage: build_container
+  image: docker:19.03.1
+  script:
+  - docker build -t ansible-viptela .
+
 clean:
   stage: clean
   script:
@@ -25,8 +32,8 @@ clean:
     changes:
       - inventory/viptela-workshop.yml
 
-build:
-  stage: build
+build_topology:
+  stage: build_topology
   script:
   - ansible-playbook build.yml
 
