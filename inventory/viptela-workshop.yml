@@ -14,6 +14,7 @@ all:
     client:
       hosts:
         host1:
+        host2:
     public_hosts:
       hosts:
         server1:
@@ -35,4 +36,5 @@ all:
         viptela_vedge:
           hosts:
             vedge1:
+            vedge2:
             vedge-hq:
