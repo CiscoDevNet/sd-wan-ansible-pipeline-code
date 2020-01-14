@@ -1,53 +1,99 @@
 pipeline {
-    agent {
-        dockerfile {
-            filename 'Dockerfile'
-            args  '-v /etc/passwd:/etc/passwd'
-        }
+  agent {
+    kubernetes {
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: ansible
+    image: jasonking/ansible-sdwan
+    command:
+    - sleep
+    args:
+    - 99d
+    tty: true
+"""
     }
-    options {
-      disableConcurrentBuilds()
-      lock resource: 'jenkins_sdwan'
-    }
-    environment {
-        VIRL_USERNAME = credentials('cpn-virl-username')
-        VIRL_PASSWORD = credentials('cpn-virl-password')
-        VIRL_HOST = credentials('cpn-virl-host')
-        VIRL_SESSION = "jenkins_workshop1"
-        VIPTELA_ORG = "DevNet Learning Lab"
-        HOME = "${WORKSPACE}"
-        DEFAULT_LOCAL_TMP = "${WORKSPACE}/ansible"
-    }
-    stages {
-        stage('Build VIRL Topology') {
-           steps {
-                echo 'Running build.yml...'
-                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'build.yml'
-           }
-        }
-        stage('Configure SD-WAN Fabric') {
-           steps {
-                echo 'Configure SD-WAN Fabric'
-                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'configure.yml'
-                echo 'Loading Templates...'
-                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'import-templates.yml'
-                echo 'Waiting for vEdges to Sync...'
-                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'waitfor-sync.yml'
-                echo 'Attaching Templates...'
-                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'attach-template.yml'
-           }
-        }
-        stage('Running Tests') {
-           steps {
-                echo 'Check SD-WAN...'
-                ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'check-sdwan.yml'
-           }
+  }
+  options {
+    disableConcurrentBuilds()
+    lock resource: 'jenkins_virl1_sdwan'
+  }
+  environment {
+    VIRL_USERNAME = credentials('cpn-virl-username')
+    VIRL_PASSWORD = credentials('cpn-virl-password')
+    VIRL_HOST = credentials('cpn-virl1-host')
+    VIRL_SESSION = "jenkins_sdwan"
+    HOME = "${WORKSPACE}"
+    DEFAULT_LOCAL_TMP = "${WORKSPACE}/ansible"
+  }
+  stages {
+    stage('Clean Previous Deployment') {
+      steps {
+        echo 'Running clean.yml...'
+        container('ansible') {
+          ansiblePlaybook disableHostKeyChecking: true, playbook: 'clean.yml'
         }      
-    }    
-    post {
-        always {
-            ansiblePlaybook disableHostKeyChecking: true, inventory: 'inventory/', playbook: 'clean.yml'
-            cleanWs()
-        }
+      }          
     }
+    stage('Build Topology') {
+      steps {
+        echo 'Running build.yml...'
+        container('ansible') {
+          ansiblePlaybook disableHostKeyChecking: true, playbook: 'build.yml'
+        }
+      }
+    }
+    stage('Configure Control Plane') {
+      steps {
+        echo 'Running configure.yml...'
+        container('ansible') {
+          ansiblePlaybook disableHostKeyChecking: true, playbook: 'configure.yml'
+        }
+      }
+    }
+    stage('Import Templates') {
+      steps {
+        echo 'Running import-templates.yml'
+        container('ansible') {
+          ansiblePlaybook disableHostKeyChecking: true, playbook: 'import-templates.yml'
+        }
+      }
+    }
+    stage('Wait for Edges') {
+      steps {
+        echo 'Running waitfor-sync.yml...'
+        container('ansible') {
+          ansiblePlaybook disableHostKeyChecking: true, playbook: 'waitfor-sync.yml'
+        }
+      }
+    }
+    stage('Attach Templates') {
+      steps {
+        echo 'Running attach-template.yml'
+        container('ansible') {
+          ansiblePlaybook disableHostKeyChecking: true, playbook: 'attach-template.yml'
+        }
+      }
+    }
+    stage('Run Tests') {
+      steps {
+        echo 'Running check-sdwan.yml...'
+        container('ansible') {
+          ansiblePlaybook disableHostKeyChecking: true, playbook: 'check-sdwan.yml'
+        }
+      }
+    }
+  }
+  post {
+    always {
+      echo 'Cleaning up...'
+      container('ansible') {
+        ansiblePlaybook disableHostKeyChecking: true, playbook: 'clean.yml'
+      }
+      cleanWs()
+    }
+  }
 }
+
