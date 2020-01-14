@@ -15,45 +15,45 @@
   vars:
     session: "{{ lookup('env', 'VIRL_SESSION') | default('') }}"
   tasks:
-#  - name: Find previsouly created certs
-#    find:
-#      paths: "{{ viptela_cert_dir }}"
-#      patterns: '*.pem,*.key,*.csr,*.crt'
-#    register: find_results
-#
-#  - name: Delete previsouly created certs
-#    file:
-#      path: "{{ item['path'] }}"
-#      state: absent
-#    with_items: "{{ find_results['files'] }}"
+    - block:
+      - name: Check for session id file
+        stat:
+          path: "{{ virl_sim_file }}"
+        register: stat_result
 
-  - name: Delete cert dir
-    file:
-      path: "{{ viptela_cert_dir }}"
-      state: absent
+      - name: Get the existing session ID
+        set_fact:
+          session: "{{lookup('file', virl_sim_file) }}"
+        when: stat_result.stat.exists
+      when: session == ""
 
-  - name: Remove host from known_hosts
-    known_hosts:
-      name: "{{ hostvars[item].ansible_host }}"
-      state: absent
-    when: hostvars[item].ansible_host is defined
-    loop: "{{ groups.all }}"
+    - name: Delete cert dir
+      file:
+        path: "{{ viptela_cert_dir }}"
+        state: absent
 
-  - name: Destroy the simulation
-    uri:
-      url: "http://{{ virl_host }}:19399/simengine/rest/stop/{{ sim_id }}"
-      user: "{{ virl_username }}"
-      password: "{{ virl_password }}"
-      method: GET
-      return_content: yes
-    no_log: false  # Don't show output as your password will be on the URI string
-    register: uri_results
-    failed_when: false
-    delegate_to: localhost
-    vars:
-      sim_id: "{{ session | default(lookup('file', virl_sim_file, errors='ignore')) }}"
+    - name: Remove host from known_hosts
+      known_hosts:
+        name: "{{ hostvars[item].ansible_host }}"
+        state: absent
+      when: hostvars[item].ansible_host is defined
+      loop: "{{ groups.all }}"
 
-  - name: Delete Simulation ID File
-    file:
-      path: "{{ virl_sim_file }}"
-      state: absent
+    - name: Destroy the simulation
+      uri:
+        url: "http://{{ virl_host }}:19399/simengine/rest/stop/{{ sim_id }}"
+        user: "{{ virl_username }}"
+        password: "{{ virl_password }}"
+        method: GET
+        return_content: yes
+      no_log: false  # Don't show output as your password will be on the URI string
+      register: uri_results
+      failed_when: false
+      delegate_to: localhost
+      vars:
+        sim_id: "{{ session | default(lookup('file', virl_sim_file, errors='ignore')) }}"
+
+    - name: Delete Simulation ID File
+      file:
+        path: "{{ virl_sim_file }}"
+        state: absent
