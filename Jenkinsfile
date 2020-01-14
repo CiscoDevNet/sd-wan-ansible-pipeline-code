@@ -21,8 +21,8 @@ spec:
     lock resource: 'jenkins_virl1_sdwan'
   }
   environment {
-    VIRL_USERNAME = credentials('cpn-virl-username')
-    VIRL_PASSWORD = credentials('cpn-virl-password')
+    VIRL_USERNAME = credentials('cpn-virl1-username')
+    VIRL_PASSWORD = credentials('cpn-virl1-password')
     VIRL_HOST = credentials('cpn-virl1-host')
     VIRL_SESSION = "jenkins_sdwan"
     HOME = "${WORKSPACE}"
