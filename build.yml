@@ -54,7 +54,7 @@
         when: stat_result.stat.exists
       when: session == ""
 
-    - name: Skip if we have a session passed in
+    - name: Build the simulation
       include_role:
         name: ansible-virl
         tasks_from: build
