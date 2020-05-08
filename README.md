@@ -1,6 +1,8 @@
 # sd-wan-ansible-pipeline-code
 This collection of Ansible inventory and playbooks is designed to be used with the DevNet Learning Module [Cisco SD-WAN Ansible Pipeline](https://developer.cisco.com/learning/modules/sd-wan-ansible-pipeline) and the DevNet [Multi-IOS Cisco Test Network](https://devnetsandbox.cisco.com/RM/Topology) sandbox.  However, it can also be applied to any VIRL server that has the appropriate Cisco SD-WAN images installed.
 
+> Note: future development of the SDWAN DevOps code base has been moved to the [sdwan-devops](https://github.com/CiscoDevNet/sdwan-devops) repo.  There are many improvements there, including support for VIRL2/CML2 and VMware deployments.
+
 ## Requirements
 - VIRL server with vManage, vSmart, vBond and vEdge images installed.  For instructions on how to do this, look at the [virl-howtos](https://github.com/CiscoSE/virl-howtos) repo.
 - [sshpass](https://sourceforge.net/projects/sshpass/) installed
