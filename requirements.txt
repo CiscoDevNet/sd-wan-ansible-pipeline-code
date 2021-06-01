@@ -4,4 +4,4 @@ pyOpenSSL==18.0.0
 virlutils==0.8.4
 netaddr==0.7.19
 scp==0.13.0
-urllib3==1.24.3
+urllib3==1.26.5
