@@ -1,4 +1,4 @@
-ansible==2.7.10
+ansible==7.0.0
 ncclient==0.6.3
 pyOpenSSL==18.0.0
 virlutils==0.8.4
